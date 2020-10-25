@@ -23,6 +23,16 @@ func TestFloatStringParse(t *testing.T) {
 	}
 	fmt.Println(d.Date())
 }
+
+func TestYYYYdashMMdashDDspTimeString(t *testing.T){
+	s := "2017-02-13 14:05:22"
+	d, err := parseYYYYdashMMdashDDspTimeString(s)
+	if err != nil{
+		t.Error(err)
+	}
+	fmt.Print(d.Date())
+}
+
 func TestParse(t *testing.T) {
 	firstS := "01-22-20"
 	d, err := ParseExcelString(firstS)
@@ -54,4 +64,23 @@ func TestParse(t *testing.T) {
 	if d2.Month() != time.Month(7) {
 		t.Error("first month should be 7")
 	}
+
+	thirdS := "2017-02-13 14:05:22"
+	d3, err := ParseExcelString(thirdS)
+	if err != nil {
+		t.Error(err)
+	}
+	if d3.Day() != 13 {
+		t.Error("day should be 13")
+	}
+	if d3.Month() != time.Month(2) {
+		t.Error("month should be 2")
+	}
+	if d3.Year() != 2017{
+		t.Error("year should be 2017")
+	}
+	if d3.Hour() != 14 {
+		t.Error("hour should be 14")
+	}
+
 }
