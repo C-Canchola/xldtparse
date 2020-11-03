@@ -40,7 +40,7 @@ func parsemmddyyyySlashSeperated(s string)(time.Time, error){
 	if len(strSplit) != 3 {
 		return time.Time{}, errSplitNotRequiredLength
 	}
-	yearVal, err := parseDatePart(strSplit[2], 4, 0, 99)
+	yearVal, err := parseDatePart(strSplit[2], 4, 1899, 9999)
 	if err != nil{
 		return time.Time{}, err
 	}
