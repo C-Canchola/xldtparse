@@ -35,6 +35,34 @@ func parseDatePart(datePart string, reqLen int, minVal int, maxVal int)(int, err
 	return 0, errParseDatePartParseFail
 }
 
+func parsemmddyyyySlashSeperated(s string)(time.Time, error){
+	strSplit := strings.Split(s, "/")
+	if len(strSplit) != 3 {
+		return time.Time{}, errSplitNotRequiredLength
+	}
+	yearVal, err := parseDatePart(strSplit[2], 4, 0, 99)
+	if err != nil{
+		return time.Time{}, err
+	}
+	monthVal, err := parseDatePart(strSplit[0], 2, 1, 12)
+	if err != nil{
+		return time.Time{}, err
+	}
+	dayVal, err := parseDatePart(strSplit[1], 2, 1, 31)
+	if err != nil{
+		return time.Time{}, err
+	}
+
+	var dateYear int
+	if yearVal < 70 {
+		dateYear = yearVal + pre1970YearAdd
+	} else {
+		dateYear = yearVal + post1970YearAdd
+	}
+	timeVal := time.Date(dateYear, time.Month(monthVal), int(dayVal), 0, 0, 0, 0, time.UTC)
+	return timeVal, nil
+}
+
 // ParseExcelDateString attempts to parse a string of the format
 // mm-dd-yy into a valid Go time.Time value.
 func parsemmddyyString(s string) (time.Time, error) {
@@ -134,6 +162,9 @@ func ParseExcelString(s string) (time.Time, error) {
 		return parseVal, nil
 	}
 	if parseVal, err := parsemmddyyString(s); err == nil{
+		return parseVal, nil
+	}
+	if parseVal, err := parsemmddyyyySlashSeperated(s); err == nil{
 		return parseVal, nil
 	}
 	if parseVal, err := parseYYYYdashMMdashDDspTimeString(s); err == nil{
