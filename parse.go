@@ -53,13 +53,7 @@ func parsemmddyyyySlashSeperated(s string)(time.Time, error){
 		return time.Time{}, err
 	}
 
-	var dateYear int
-	if yearVal < 70 {
-		dateYear = yearVal + pre1970YearAdd
-	} else {
-		dateYear = yearVal + post1970YearAdd
-	}
-	timeVal := time.Date(dateYear, time.Month(monthVal), int(dayVal), 0, 0, 0, 0, time.UTC)
+	timeVal := time.Date(yearVal, time.Month(monthVal), int(dayVal), 0, 0, 0, 0, time.UTC)
 	return timeVal, nil
 }
 
